@@ -1,14 +1,17 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { DeployParamsDto, VMspecsDto } from './dto/deploy-params.dto';
 import { ClusterService } from './cluster/cluster.service';
+
 @Injectable()
 export class AppService {
   private readonly logger = new Logger(AppService.name);
-  private readonly all: ClusterService
+
+  constructor(private readonly clusterService: ClusterService) {} // Inject ClusterService via constructor
+
   async deployAll(params: DeployParamsDto, specs: VMspecsDto): Promise<string> {
     try {
       // Call the deploy_all_charts function
-      await this.all.deployAllCharts(
+      await this.clusterService.deployAllCharts(
         params.master_ip,
         params.worker1_ip,
         params.worker2_ip,

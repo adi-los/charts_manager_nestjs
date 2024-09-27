@@ -22,6 +22,7 @@ export class VMService {
 
 
    async masterVM(addressip, network, hostname, tenant, gateway, hypervisor) {
+        console.log(hostname)
         const installation_endpoint = `${this.VM_AGENTS[hypervisor]}`
         const master_payload = JSON.stringify({
             addressip: addressip,
@@ -56,6 +57,7 @@ export class VMService {
 
 
     async worker1VM(addressip, network, hostname, tenant, gateway, hypervisor){
+        console.log(hostname)
         const installation_endpoint = `${this.VM_AGENTS[hypervisor]}`
         const worker1_payload = JSON.stringify({
             "addressip": addressip,
@@ -89,6 +91,7 @@ export class VMService {
 
 
     async worker2VM(addressip, network, hostname, tenant, gateway, hypervisor){
+        console.log(hostname)
         const installation_endpoint = `${this.VM_AGENTS[hypervisor]}`
         const worker2_payload = JSON.stringify({
             "addressip": addressip,
