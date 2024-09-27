@@ -1,103 +1,55 @@
-// // src/dto/deploy-params.dto.ts
-// import { IsString, IsIP } from 'class-validator';
-
-// export class DeployParamsDto {
-//   @IsIP()
-//   master_ip: string;
-
-//   @IsIP()
-//   worker1_ip: string;
-
-//   @IsIP()
-//   worker2_ip: string;
-
-//   @IsString()
-//   cluster_name: string;
-
-//   @IsString()
-//   hypervisor: string;
-
-//   @IsString()
-//   username: string;
-
-//   @IsString()
-//   password: string;
-// }
-
-// export class VMspecsDto {
-//   @IsString()
-//   master_hostname: string;
-
-//   @IsString()
-//   worker1_hostname: string;
-
-//   @IsString()
-//   worker2_hostname: string;
-
-//   @IsString()
-//   tenant: string;
-
-//   @IsString()
-//   network: string;
-
-//   @IsString()
-//   gateway: string;
-// }
-
-
-
-import { IsString, IsIP } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class DeployParamsDto {
+    @IsNotEmpty()
+    @IsString()
+    master_ip: string;
 
-  @IsIP()
-  master_ip: string;
+    @IsNotEmpty()
+    @IsString()
+    worker1_ip: string;
 
+    @IsNotEmpty()
+    @IsString()
+    worker2_ip: string;
 
-  @IsIP()
-  worker1_ip: string;
+    @IsNotEmpty()
+    @IsString()
+    cluster_name: string;
 
+    @IsNotEmpty()
+    @IsString()
+    hypervisor: string;
 
-  @IsIP()
-  worker2_ip: string;
+    @IsNotEmpty()
+    @IsString()
+    username: string;
 
+    @IsNotEmpty()
+    @IsString()
+    password: string;
 
-  @IsString()
-  cluster_name: string;
+    @IsNotEmpty()
+    @IsString()
+    master_hostname: string;
 
+    @IsNotEmpty()
+    @IsString()
+    worker1_hostname: string;
 
-  @IsString()
-  hypervisor: string;
+    @IsNotEmpty()
+    @IsString()
+    worker2_hostname: string;
 
+    @IsNotEmpty()
+    @IsString()
+    tenant: string;
 
-  @IsString()
-  username: string;
+    @IsNotEmpty()
+    @IsString()
+    network: string;
 
-
-  @IsString()
-  password: string;
-}
-
-export class VMspecsDto {
-  @IsString()
-  master_hostname: string;
-
-
-  @IsString()
-  worker1_hostname: string;
-
-  @IsString()
-  worker2_hostname: string;
-
- 
-  @IsString()
-  tenant: string;
-
-  @IsString()
-  network: string;
-
-
-  @IsString()
-  gateway: string;
+    @IsNotEmpty()
+    @IsString()
+    gateway: string;
 }

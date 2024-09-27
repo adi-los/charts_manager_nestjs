@@ -3,7 +3,6 @@ import { VMService } from 'src/vms/vms.service';
 import { RancherService } from 'src/rancher/rancher.service';
 import axios from 'axios';
 import * as time from 'timers/promises'; // For sleep functionality
-import { VMspecsDto } from 'src/dto/deploy-params.dto';
 import { SshService } from 'src/ssh/ssh.service';
 import { ChartsService } from 'src/charts/charts.service';
 
@@ -27,19 +26,25 @@ export class ClusterService {
     clusterName: string,
     username: string,
     password: string,
-    specs: VMspecsDto,
+    master_hostname: string,
+    worker1_hostname: string,
+    worker2_hostname: string,
+    tenant: string,
+    network: string,
+    gateway: string,
+
   ): Promise<void> {
     try {
       // Step 1: Deploy VMs
-      await this.vmService.masterVM(masterIp, specs.network, specs.master_hostname, specs.tenant, specs.gateway, hypervisor);
-      await this.vmService.worker1VM(worker1Ip, specs.network, specs.worker1_hostname, specs.tenant, specs.gateway, hypervisor);
-      await this.vmService.worker2VM(worker2Ip, specs.network, specs.worker2_hostname, specs.tenant, specs.gateway, hypervisor);
+      await this.vmService.masterVM(masterIp, network, master_hostname, tenant, gateway, hypervisor);
+      await this.vmService.worker1VM(worker1Ip, network, worker1_hostname, tenant, gateway, hypervisor);
+      await this.vmService.worker2VM(worker2Ip, network, worker2_hostname, tenant, gateway, hypervisor);
       
       this.logger.log('Waiting for VMs to stabilize...');
       await time.setTimeout(15 * 60 * 1000); // Wait for 15 min
 
       // Step 2: Launch VMs
-      await this.vmService.launchVMs(specs.master_hostname, specs.worker1_hostname, specs.worker2_hostname, hypervisor);
+      await this.vmService.launchVMs(master_hostname, worker1_hostname, worker2_hostname, hypervisor);
       await time.setTimeout(180000); // Wait for 120 seconds
 
       // Step 3: Initialize resources
@@ -76,7 +81,7 @@ export class ClusterService {
       await this.deployTraefik(masterIp);
 
       // Step 12: Install NFS chart
-      await this.installNFSChart(masterIp, specs.master_hostname);
+      await this.installNFSChart(masterIp, master_hostname);
 
       // Step 13: Install Vault with secret
       await this.installVault(masterIp);

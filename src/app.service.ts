@@ -45,7 +45,7 @@
 
 import { Injectable, Logger } from '@nestjs/common';
 import { ClusterService } from './cluster/cluster.service';
-import { DeployParamsDto, VMspecsDto } from './dto/deploy-params.dto';
+import { DeployParamsDto } from './dto/deploy-params.dto';
 
 @Injectable()
 export class AppService {
@@ -55,9 +55,8 @@ export class AppService {
 
   async deployCluster(
     deployParams: DeployParamsDto,
-    vmSpecs: VMspecsDto,
   ): Promise<void> {
-    const { master_ip, worker1_ip, worker2_ip, hypervisor, cluster_name, username, password } = deployParams;
+    const { master_ip, worker1_ip, worker2_ip, hypervisor, cluster_name, username, password, master_hostname, worker1_hostname, worker2_hostname, tenant, network, gateway } = deployParams;
 
     this.logger.log('Starting cluster deployment...');
 
@@ -69,7 +68,12 @@ export class AppService {
       cluster_name,
       username,
       password,
-      vmSpecs,
+      master_hostname,
+      worker1_hostname,
+      worker2_hostname,
+      tenant,
+      network,
+      gateway
     );
 
     this.logger.log('Cluster deployment completed successfully.');

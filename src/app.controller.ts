@@ -46,16 +46,17 @@
 
 import { Controller, Post, Body, HttpException } from '@nestjs/common';
 import { AppService } from './app.service';
-import { DeployParamsDto, VMspecsDto } from './dto/deploy-params.dto';
+import { DeployParamsDto } from './dto/deploy-params.dto';
 
 @Controller('deploy')
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Post()
-  async deploy(@Body() body: { deployParams: DeployParamsDto; vmSpecs: VMspecsDto }): Promise<string> {
+  async deploy(@Body() body: { deployParams: DeployParamsDto }): Promise<string> {
+    console.log('Received deployParams:', body.deployParams);
     try {
-      await this.appService.deployCluster(body.deployParams, body.vmSpecs);
+      await this.appService.deployCluster(body.deployParams);
       return 'Cluster deployment initiated successfully!';
     } catch (error) {
       throw new HttpException(`Deployment failed: ${error.message}`, 500);
