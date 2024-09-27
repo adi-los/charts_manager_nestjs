@@ -1,20 +1,20 @@
-import { Controller, Post, Body } from '@nestjs/common';
-import { AppService } from './app.service'; // Adjust the import according to your file structure
-import { DeployParamsDto, VMspecsDto } from './dto/deploy-params.dto';
-@Controller('deploy')
-export class DeployController {
-  constructor(private readonly appService: AppService) {}
+// import { Controller, Post, Body } from '@nestjs/common';
+// import { AppService } from './app.service'; // Adjust the import according to your file structure
+// import { DeployParamsDto, VMspecsDto } from './dto/deploy-params.dto';
+// @Controller('deploy')
+// export class DeployController {
+//   constructor(private readonly appService: AppService) {}
 
-  @Post('all')
-  async deployAll(@Body() params: DeployParamsDto, @Body() specs: VMspecsDto): Promise<{ message: string }> {
-    try {
-      const result = await this.appService.deployAll(params, specs);
-      return { message: result };
-    } catch (error) {
-      throw new Error(`Deployment failed: ${error.message}`);
-    }
-  }
-}
+//   @Post('all')
+//   async deployAll(@Body() params: DeployParamsDto, @Body() specs: VMspecsDto): Promise<{ message: string }> {
+//     try {
+//       const result = await this.appService.deployAll(params, specs);
+//       return { message: result };
+//     } catch (error) {
+//       throw new Error(`Deployment failed: ${error.message}`);
+//     }
+//   }
+// }
 
 
 // import { Controller, Post, Body } from '@nestjs/common';
@@ -44,3 +44,21 @@ export class DeployController {
 //   }
 // }
 
+import { Controller, Post, Body, HttpException } from '@nestjs/common';
+import { AppService } from './app.service';
+import { DeployParamsDto, VMspecsDto } from './dto/deploy-params.dto';
+
+@Controller('deploy')
+export class AppController {
+  constructor(private readonly appService: AppService) {}
+
+  @Post()
+  async deploy(@Body() body: { deployParams: DeployParamsDto; vmSpecs: VMspecsDto }): Promise<string> {
+    try {
+      await this.appService.deployCluster(body.deployParams, body.vmSpecs);
+      return 'Cluster deployment initiated successfully!';
+    } catch (error) {
+      throw new HttpException(`Deployment failed: ${error.message}`, 500);
+    }
+  }
+}
